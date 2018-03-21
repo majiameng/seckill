@@ -19,14 +19,14 @@
 5. redis队列中没有剩余，则提示库存不足，抢购失败
 
 ### 基于mysql事务和排它锁工作流程：
-1：开启事务
-2：查询库存，并显示的设置写锁（排他锁）：SELECT * FROM goods WHERE id = 1 FOR UPDATE
-3：生成订单
-4：去库存，隐示的设置写锁（排他锁）：UPDATE goods SET counts = counts – 1 WHERE id = 1
-5：commit，释放锁
+1. 开启事务
+2. 查询库存，并显示的设置写锁（排他锁）：SELECT * FROM goods WHERE id = 1 FOR UPDATE
+3. 生成订单
+4. 去库存，隐示的设置写锁（排他锁）：UPDATE goods SET counts = counts – 1 WHERE id = 1
+5. commit，释放锁
 注意：第二步不可以设置共享锁，不然有可能会造成死锁。
 
 ### 压测工具：
-apache自带ab测试工具 ./ab -n1000 -c100 http://host/seckill/buy_mysql.php
-apache自带ab测试工具 ./ab -n1000 -c100 http://host/seckill/buy_redis.php
-apache自带ab测试工具 ./ab -n1000 -c100 http://host/seckill/buy_transaction.php
+- apache自带ab测试工具 ./ab -n1000 -c100 http://host/seckill/buy_mysql.php
+- apache自带ab测试工具 ./ab -n1000 -c100 http://host/seckill/buy_redis.php
+- apache自带ab测试工具 ./ab -n1000 -c100 http://host/seckill/buy_transaction.php
